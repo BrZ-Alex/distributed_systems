@@ -12,7 +12,11 @@ public class DBUtils {
     private static Connection getNewConnection() throws SQLException, ClassNotFoundException {
         String url = "jdbc:postgresql://localhost:5432/dist";
         String user = "postgres";
+<<<<<<< HEAD
         String passwd = "postgres";
+=======
+        String passwd = "alex1999";
+>>>>>>> 0d8aad8f9a03d3af7a208ff99ed7d43b0f9e8d7f
         Class.forName("org.postgresql.Driver");
         return DriverManager.getConnection(url, user, passwd);
     }

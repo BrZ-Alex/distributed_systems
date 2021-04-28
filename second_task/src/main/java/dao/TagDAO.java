@@ -12,13 +12,14 @@ import java.util.List;
 public class TagDAO extends MainDAO<TagEntity>{
     @Override
     public void insert(TagEntity obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        Statement statement = connection.createStatement();
+        Statement statement = DBUtils.getStatement();
+
         String sql = "insert into tags(node_id, k, v) " +
                 "values (" + obj.getNodeId() + ", '"
                 + obj.getK() + "', '"
                 + obj.getV().replaceAll("'", "''") + "')";
         statement.execute(sql);
+        DBUtils.getConnection().commit();
     }
 
     private static final String sql = "insert into tags(node_id, k, v) " +
@@ -32,20 +33,20 @@ public class TagDAO extends MainDAO<TagEntity>{
 
     @Override
     public void insertPrepared(TagEntity obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = DBUtils.getTagPreparedStatement(sql);
         prepare(statement, obj);
         statement.execute();
+        DBUtils.getConnection().commit();
     }
 
     @Override
     public void batchInsert(List<TagEntity> obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = DBUtils.getTagPreparedStatement(sql);
         for (TagEntity tag : obj) {
             prepare(statement, tag);
             statement.addBatch();
         }
         statement.executeBatch();
+        DBUtils.getConnection().commit();
     }
 }

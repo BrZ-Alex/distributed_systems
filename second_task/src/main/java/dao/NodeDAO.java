@@ -12,8 +12,7 @@ import java.util.List;
 public class NodeDAO extends MainDAO<NodeEntity>{
     @Override
     public void insert(NodeEntity obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        Statement statement = connection.createStatement();
+        Statement statement = DBUtils.getStatement();
 
         String sql = "insert into nodes(id, version, uid, users, changeset, lat, lon) " +
                 "values ("
@@ -25,6 +24,7 @@ public class NodeDAO extends MainDAO<NodeEntity>{
                 + obj.getLat() + ", "
                 + obj.getLon() +  ")";
         statement.execute(sql);
+        DBUtils.getConnection().commit();
     }
 
     private static final String sql = "insert into nodes(id, version, uid, users, changeset, lat, lon) " +
@@ -42,20 +42,20 @@ public class NodeDAO extends MainDAO<NodeEntity>{
 
     @Override
     public void insertPrepared(NodeEntity obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = DBUtils.getNodePreparedStatement(sql);
         prepare(statement, obj);
         statement.execute();
+        DBUtils.getConnection().commit();
     }
 
     @Override
     public void batchInsert(List<NodeEntity> obj) throws SQLException {
-        Connection connection = DBUtils.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = DBUtils.getNodePreparedStatement(sql);
         for (NodeEntity node : obj) {
             prepare(statement, node);
             statement.addBatch();
         }
         statement.executeBatch();
+        DBUtils.getConnection().commit();
     }
 }

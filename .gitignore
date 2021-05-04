@@ -5,3 +5,8 @@
 /second_task/.gradle/
 /second_task/build/
 /second_task/src/main/resources/RU-NVS.osm
+
+/third_task/.idea/
+/third_task/.gradle/
+/third_task/build/
+/third_task/src/main/resources/RU-NVS.osm
